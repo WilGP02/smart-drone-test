@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://db:5432/dronedb
+    username: user
+    password: password
+    driver-class-name: org.postgresql.Driver
+  r2dbc:
+    url: r2dbc:postgresql://db:5432/dronedb
+    username: user
+    password: password
+  liquibase:
+    url: jdbc:postgresql://db:5432/dronedb
+    user: user
+    password: password
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+logging:
+  level:
+    liquibase: DEBUG

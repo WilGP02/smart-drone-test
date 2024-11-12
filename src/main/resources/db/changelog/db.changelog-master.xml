@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="example">
+        <createTable tableName="drones">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="serial_number" type="VARCHAR(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="model" type="VARCHAR(50)"/>
+            <column name="max_weight" type="DOUBLE PRECISION">
+                <constraints nullable="false"/>
+            </column>
+            <column name="current_weight" type="DOUBLE PRECISION" defaultValue="0"/>
+            <column name="status" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="example">
+        <createTable tableName="deliveries">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="drone_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="weight" type="DOUBLE PRECISION">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="delivery_timestamp" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="deliveries"
+                                 baseColumnNames="drone_id"
+                                 referencedTableName="drones"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_deliveries_drones"/>
+    </changeSet>
+
+    <changeSet id="3" author="example">
+        <sql>
+            ALTER TABLE drones ALTER COLUMN id SET DEFAULT gen_random_uuid();
+        </sql>
+    </changeSet>
+
+    <changeSet id="4" author="example">
+        <sql>
+            ALTER TABLE deliveries ALTER COLUMN id SET DEFAULT gen_random_uuid();
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
